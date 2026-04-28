@@ -20,6 +20,7 @@ export const spaInfo: Space[] =  [
     "pricePerHour": 60000,
     "available": true
   },
+
   {
     "id": 3,
     "name": "North Flex Desk",

@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
-import { Space, Reservation } from "../types";
-import { initialSpaces } from "../data/spaces";
+import type { Space, Reservation } from "../types";
+import { spaInfo } from "../data/spaces";
 
 interface AppContextType {
   spaces: Space[];
@@ -16,17 +16,17 @@ interface AppContextType {
   cancelReservation: (id: number) => void;
 }
 
-const AppContext = createContext<AppContextType | null>(null);
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: any) => {
-  const [spaces, setSpaces] = useState<Space[]>(initialSpaces);
+  const [spaces, setSpaces] = useState<Space[]>(spaInfo);
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [filterType, setFilterType] = useState("");
-  const [filterAvailable, setFilterAvailable] = useState("");
+  const [filterType, setFilterType] = useState<string>("");
+  const [filterAvailable, setFilterAvailable] = useState<string>("");
 
   const reserveSpace = (spaceId: number, hours: number) => {
-    const space = spaces.find((s) => s.id === spaceId);
-    if (!space || !space.available) return;
+    const space = spaces.find(s => s.id == spaceId); 
+    if (!space) return; 
 
     const newReservation: Reservation = {
       id: Date.now(),
@@ -37,40 +37,33 @@ export const AppProvider = ({ children }: any) => {
     };
 
     setReservations([...reservations, newReservation]);
-
-    setSpaces(
-      spaces.map((s) =>
-        s.id === spaceId ? { ...s, available: false } : s
-      )
-    );
+    setSpaces(spaces.map(s =>
+      s.id === spaceId ? { ...s, available: false } : s
+    ));
   };
 
   const cancelReservation = (id: number) => {
-    const reservation = reservations.find((r) => r.id === id);
+    const reservation = reservations.find(r => r.id === id);
     if (!reservation) return;
 
-    setReservations(reservations.filter((r) => r.id !== id));
+    setReservations(reservations.filter(r => r.id != id));
 
-    setSpaces(
-      spaces.map((s) =>
-        s.id === reservation.spaceId ? { ...s, available: true } : s
-      )
-    );
+    setSpaces(spaces.map(s =>
+      s.id === reservation.spaceId ? { ...s, available: true } : s
+    ));
   };
 
   return (
-    <AppContext.Provider
-      value={{
-        spaces,
-        reservations,
-        filterType,
-        filterAvailable,
-        setFilterType,
-        setFilterAvailable,
-        reserveSpace,
-        cancelReservation,
-      }}
-    >
+    <AppContext.Provider value={{
+      spaces,
+      reservations,
+      filterType,
+      filterAvailable,
+      setFilterType,
+      setFilterAvailable,
+      reserveSpace,
+      cancelReservation,
+    }}>
       {children}
     </AppContext.Provider>
   );
@@ -78,6 +71,5 @@ export const AppProvider = ({ children }: any) => {
 
 export const useApp = () => {
   const context = useContext(AppContext);
-  if (!context) throw new Error("Error en context");
-  return context;
+  if (!context) throw new Error("error");
 };

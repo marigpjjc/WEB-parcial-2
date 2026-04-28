@@ -1,4 +1,4 @@
-import { Space } from "../types";
+import type { Space } from "../types";
 import { useApp } from "../context/AppContext";
 
 export const SpaceCard = ({ space }: { space: Space }) => {

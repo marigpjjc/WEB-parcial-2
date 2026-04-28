@@ -6,13 +6,13 @@ export const ReservationsPage = () => {
 
   return (
     <div>
-      <h1>Reservas</h1>
+      <h1>reservaciones</h1>
 
       {reservations.map((r) => (
         <div key={r.id}>
           <p>{r.name}</p>
-          <p>Horas: {r.hours}</p>
-          <p>Total: ${r.total}</p>
+          <p>horas por reservar{r.hours}</p>
+          <p>total ${r.total}</p>
 
           <button onClick={() => cancelReservation(r.id)}>
             Cancelar
